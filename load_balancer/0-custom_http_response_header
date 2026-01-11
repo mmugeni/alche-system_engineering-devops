@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
-# Configures Nginx to add a custom X-Served-By HTTP response header
-sudo apt update -y
-sudo apt install nginx -y
-sudo sed -i "/listen 80 default_server/a add_header X-Served-By \"$(hostname)\";" /etc/nginx/sites-available/default
-sudo service nginx restart
+# Install nginx and configure X-Served-By header with hostname
+
+# Update and install nginx
+apt-get update -y
+apt-get install -y nginx
+
+# Ensure the hostname is correctly set
+# Replace this if your student ID differs
+hostnamectl set-hostname 6949-$(hostname)  
+
+# Backup default config just in case
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+
+# Add the custom header to the default server block
+sed -i '/server_name _;/a \
+    add_header X-Served-By $hostname;\n' /etc/nginx/sites-available/default
+
+# Restart nginx without systemctl
+service nginx restart
+
+# Verify (optional, for testing only)
+curl -sI localhost | grep X-Served-By
