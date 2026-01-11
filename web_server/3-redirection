@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
-# Configures nginx to redirect /redirect_me to a YouTube video
-
-apt-get update
-apt-get install -y nginx
-
-sed -i '/server_name _;/a \
-location = /redirect_me {\n\
-    return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\
-}\n' /etc/nginx/sites-available/default
-
-service nginx start
+# Configures my Nginx server so that /redirect_me is redirecting to another page
+sudo apt update -y
+sudo apt install nginx -y
+sudo sed -i '/server_name _;/a\location /redirect_me {\nreturn 301 https://github.com/mmugeni;\n}' /etc/nginx/sites-available/default
+sudo service nginx restart
