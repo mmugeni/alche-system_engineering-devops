@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
+# Installs and configures nginx to serve a custom page
 
-# Update packages
 apt-get update -y
-
-# Install nginx
 apt-get install nginx -y
 
-# Create index page
 echo "Holberton School for the win!" > /var/www/html/index.html
 
-# Start nginx (no systemctl allowed)
-service nginx start
+service nginx restart
+
