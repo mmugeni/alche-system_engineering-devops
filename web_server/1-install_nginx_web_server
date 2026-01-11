@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs and configures nginx to serve a custom page
+# Installs and configures nginx web server to serve a custom page
 
 apt-get update -y
 apt-get install nginx -y
@@ -7,4 +7,5 @@ apt-get install nginx -y
 echo "Holberton School for the win!" > /var/www/html/index.html
 
 service nginx restart
+
 
