@@ -1,10 +1,20 @@
-#!/usr/bin/env bash
-# Add checker SSH key for ubuntu user
+# File: alche-system_engineering-devops/ssh/3-let_me_in.pp
 
-KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNdtrNGtTXe5Tp1EJQop8mOSAuRGLjJ6DW4PqX4wId/Kawz35ESampIqHSOTJmbQ8UlxdJuk0gAXKk3Ncle4safGYqM/VeDK3LN5iAJxf4kcaxNtS3eVxWBE5iF3FbIjOqwxw5Lf5sRa5yXxA8HfWidhbIG5TqKL922hPgsCGABIrXRlfZYeC0FEuPWdr6smOElSVvIXthRWp9cr685KdCI+COxlj1RdVsvIo+zunmLACF9PYdjB2s96Fn0ocD3c5SGLvDOFCyvDojSAOyE70ebIElnskKsDTGwfT4P6jh9OBzTyQEIS2jOaE5RQq4IB4DsMhvbjDSQrP0MdCLgwkN"
+# Ensure the .ssh directory exists for ubuntu
+file { '/home/ubuntu/.ssh':
+  ensure => directory,
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+  mode   => '0700',
+}
 
-mkdir -p /home/ubuntu/.ssh
-grep -qxF "$KEY" /home/ubuntu/.ssh/authorized_keys 2>/dev/null || echo "$KEY" >> /home/ubuntu/.ssh/authorized_keys
-chown -R ubuntu:ubuntu /home/ubuntu/.ssh
-chmod 700 /home/ubuntu/.ssh
-chmod 600 /home/ubuntu/.ssh/authorized_keys
+# Add checker SSH key to authorized_keys
+file_line { 'checker_public_key':
+  ensure => present,
+  path   => '/home/ubuntu/.ssh/authorized_keys',
+  line   => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNdtrNGtTXe5Tp1EJQop8mOSAuRGLjJ6DW4PqX4wId/Kawz35ESampIqHSOTJmbQ8UlxdJuk0gAXKk3Ncle4safGYqM/VeDK3LN5iAJxf4kcaxNtS3eVxWBE5iF3FbIjOqwxw5Lf5sRa5yXxA8HfWidhbIG5TqKL922hPgsCGABIrXRlfZYeC0FEuPWdr6smOElSVvIXthRWp9cr685KdCI+COxlj1RdVsvIo+zunmLACF9PYdjB2s96Fn0ocD3c5SGLvDOFCyvDojSAOyE70ebIElnskKsDTGwfT4P6jh9OBzTyQEIS2jOaE5RQq4IB4DsMhvbjDSQrP0MdCLgwkN',
+  match  => '^ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNdtrNGtTXe5Tp1EJQop8mOS',
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+  mode   => '0600',
+}
